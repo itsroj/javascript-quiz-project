@@ -42,6 +42,24 @@ class Quiz {
             return true;
         }
     }
+
+
+
+// Day 2
+
+    filterQuestionsByDifficulty(difficulty) {
+        if (typeof difficulty !== 'number' || difficulty < 1 || difficulty > 3) {
+            return this.question;
+        };
+        
+    
+        this.questions = this.questions.filter(question => question.difficulty === difficulty);
+       
+        return this.questions;
+        }
+
+    averageDifficulty(){
+        const totalDifficulty = this.questions.reduce((acc,question) => acc + question.difficulty, 0);
+        return totalDifficulty / this.questions.length
+    }
 }
-
-
