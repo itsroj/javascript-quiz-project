@@ -46,7 +46,7 @@ class Quiz {
 
 
 // Day 2
-
+// filterQuestionsByDifficulty()
     filterQuestionsByDifficulty(difficulty) {
         if (typeof difficulty !== 'number' || difficulty < 1 || difficulty > 3) {
             return this.question;
@@ -58,8 +58,13 @@ class Quiz {
         return this.questions;
         }
 
+// averageDifficulty()
     averageDifficulty(){
         const totalDifficulty = this.questions.reduce((acc,question) => acc + question.difficulty, 0);
         return totalDifficulty / this.questions.length
     }
 }
+
+
+
+// Day 3

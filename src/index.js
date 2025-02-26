@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const questionContainer = document.querySelector("#question");
   const choiceContainer = document.querySelector("#choices");
   const nextButton = document.querySelector("#nextButton");
+  const restartButton = document.querySelector("#restartButton");
 
   // End view elements
   const resultContainer = document.querySelector("#result");
@@ -55,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Show first question
   showQuestion();
+    
 
 
   /************  TIMER  ************/
@@ -98,20 +100,24 @@ document.addEventListener("DOMContentLoaded", () => {
     //
     // 1. Show the question
     // Update the inner text of the question container element and show the question text
+    questionContainer.innerText = question.text;
 
     
     // 2. Update the green progress bar
     // Update the green progress bar (div#progressBar) width so that it shows the percentage of questions answered
-    
-    progressBar.style.width = `65%`; // This value is hardcoded as a placeholder
+    const percentage = (100 / quiz.questions.length) * quiz.currentQuestionIndex
+    progressBar.style.width = `${percentage}%`; 
 
 
 
     // 3. Update the question count text 
     // Update the question count (div#questionCount) show the current question out of total questions
     
-    questionCount.innerText = `Question 1 of 10`; //  This value is hardcoded as a placeholder
-
+    questionCount.innerText = `Question ${quiz.currentQuestionIndex + 1} of ${quiz.questions.length}`; //  This value is hardcoded as a placeholder
+    question.choices.forEach((choice) => {
+      choiceContainer.innerHTML += `<input type="radio" name="choice" value="${choice}">
+          <label>${choice}</label><br>` 
+    })
 
     
     // 4. Create and display new radio input element with a label for each choice.
@@ -134,9 +140,25 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function nextButtonHandler () {
     let selectedAnswer; // A variable to store the selected answer value
-
-
-
+    let allTheChoices = document.querySelectorAll("input")
+    
+    allTheChoices.forEach((input) => {
+      console.log(input)
+      if (input.checked === true) {
+        selectedAnswer = input.value;
+      }
+    })
+    const currentQuestion = quiz.questions[quiz.currentQuestionIndex]
+    if (selectedAnswer === currentQuestion.answer) {
+      console.log("nice work")
+      quiz.correctAnswers++;
+      quiz.currentQuestionIndex++;
+    }
+    else {
+      quiz.currentQuestionIndex++;
+    }
+    showQuestion();
+console.log("the choice you chose is", selectedAnswer)
     // YOUR CODE HERE:
     //
     // 1. Get all the choice elements. You can use the `document.querySelectorAll()` method.
@@ -168,7 +190,8 @@ document.addEventListener("DOMContentLoaded", () => {
     endView.style.display = "flex";
     
     // 3. Update the result container (div#result) inner text to show the number of correct answers out of total questions
-    resultContainer.innerText = `You scored 1 out of 1 correct answers!`; // This value is hardcoded as a placeholder
+    resultContainer.innerText = `You scored ${quiz.correctAnswers} out of ${quiz.questions.length} correct answers!`; // This value is hardcoded as a placeholder
   }
   
 });
+
