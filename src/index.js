@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     new Question("What is the mass–energy equivalence equation?", ["E = mc^2", "E = m*c^2", "E = m*c^3", "E = m*c"], "E = mc^2", 3),
     // Add more questions here
   ];
-  const quizDuration = 120; // 120 seconds (2 minutes)
+  const quizDuration = 5; // 120 seconds (2 minutes)
 
 
   /************  QUIZ INSTANCE  ************/
@@ -63,11 +63,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let timer;
 
+  let ourInterval = setInterval(() => {
+    quiz.timeRemaining--;
+    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+    timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+    if (quiz.timeRemaining === 0) {
+      showResults();
+      clearInterval(ourInterval);
+    }
+  },
+  1000);
 
   /************  EVENT LISTENERS  ************/
 
   nextButton.addEventListener("click", nextButtonHandler);
 
+  restartButton.addEventListener("click", restartQuiz);
 
 
   /************  FUNCTIONS  ************/
@@ -76,7 +88,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // nextButtonHandler() - Handles the click on the next button
   // showResults() - Displays the end view and the quiz results
 
+  function restartQuiz() {
+    // Reset quiz state
+    quiz.currentQuestionIndex = 0;
+    quiz.correctAnswers = 0;
+    
+    // Shuffle questions again for variety
+    quiz.shuffleQuestions();
 
+    // Switch views
+    quizView.style.display = "block";
+    endView.style.display = "none";
+
+    // Show the first question
+    showQuestion();
+  }
 
   function showQuestion() {
     // If the quiz has ended, show the results
@@ -133,7 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Hint 2: You can use the `element.type`, `element.name`, and `element.value` properties to set the type, name, and value of an element.
       // Hint 3: You can use the `element.appendChild()` method to append an element to the choices container.
       // Hint 4: You can use the `element.innerText` property to set the inner text of an element.
-
   }
 
 
@@ -194,4 +219,5 @@ console.log("the choice you chose is", selectedAnswer)
   }
   
 });
+
 
